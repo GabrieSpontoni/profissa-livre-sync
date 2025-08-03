@@ -1,65 +1,68 @@
 # profissa-livre-sync
 
-A Node.js utility that clones MongoDB data and Cloudinary assets from a production environment to a beta environment. The script wipes the beta database and storage before copying resources to keep both environments in sync.
+Ferramenta de linha de comando para sincronizar dados do MongoDB e arquivos do Cloudinary de um ambiente de produção para um ambiente beta. O script apaga a base de dados e os arquivos existentes no beta antes de copiar os recursos de produção, garantindo que ambos os ambientes fiquem alinhados.
 
-## Features
+## Recursos
 
-- Copies every MongoDB collection from production to beta.
-- Mirrors Cloudinary images, videos, and raw files.
-- Deletes existing data and assets on the beta environment prior to synchronization.
+- Clona todas as coleções do MongoDB do ambiente de produção para o beta.
+- Copia imagens, vídeos e arquivos *raw* do Cloudinary.
+- Limpa previamente os dados e os *assets* no ambiente beta antes da sincronização.
+- Compatível com Node.js 18 ou superior.
 
-## Prerequisites
+## Pré-requisitos
 
-- Node.js 18 or later.
-- Credentials for both production and beta MongoDB and Cloudinary accounts.
+- [Node.js](https://nodejs.org/) 18 ou mais recente.
+- Contas e credenciais para MongoDB e Cloudinary nos ambientes de produção e beta.
 
-## Setup
+## Instalação
 
-1. Install the dependencies:
-   ```bash
-   npm install
-   ```
-2. Copy `.env.example` to `.env` and fill in the required credentials.
+1. Instale as dependências:
 
-   | Variable | Description |
-   | --- | --- |
-   | `PROD_MONGO_URI` | MongoDB connection URI for the production database. |
-   | `BETA_MONGO_URI` | MongoDB connection URI for the beta database. |
-   | `PROD_CLOUDINARY_CLOUD_NAME` | Cloud name of the production Cloudinary account. |
-   | `PROD_CLOUDINARY_API_KEY` | API key for the production Cloudinary account. |
-   | `PROD_CLOUDINARY_API_SECRET` | API secret for the production Cloudinary account. |
-   | `BETA_CLOUDINARY_CLOUD_NAME` | Cloud name of the beta Cloudinary account. |
-   | `BETA_CLOUDINARY_API_KEY` | API key for the beta Cloudinary account. |
-   | `BETA_CLOUDINARY_API_SECRET` | API secret for the beta Cloudinary account. |
+```bash
+npm install
+```
 
-## Usage
+2. Copie o arquivo `.env.example` para `.env` e preencha as variáveis com suas credenciais:
 
-Build the project and execute the synchronization script:
+| Variável | Descrição |
+| --- | --- |
+| `PROD_MONGO_URI` | URI de conexão do MongoDB de produção. |
+| `BETA_MONGO_URI` | URI de conexão do MongoDB do beta. |
+| `PROD_CLOUDINARY_CLOUD_NAME` | Nome do *cloud* do Cloudinary de produção. |
+| `PROD_CLOUDINARY_API_KEY` | API key do Cloudinary de produção. |
+| `PROD_CLOUDINARY_API_SECRET` | API secret do Cloudinary de produção. |
+| `BETA_CLOUDINARY_CLOUD_NAME` | Nome do *cloud* do Cloudinary do beta. |
+| `BETA_CLOUDINARY_API_KEY` | API key do Cloudinary do beta. |
+| `BETA_CLOUDINARY_API_SECRET` | API secret do Cloudinary do beta. |
+
+## Uso
+
+Compile o projeto e execute o script de sincronização:
 
 ```bash
 npm run build
 node dist/index.js
 ```
 
-For development, run the script directly with TypeScript:
+Durante o desenvolvimento é possível rodar diretamente com TypeScript:
 
 ```bash
 npm run dev
 ```
 
-## Warning
+## Aviso
 
-Running the synchronization **deletes all data and files** in the beta environment before copying resources from production. Ensure this is the desired behavior before running the script.
+**Atenção:** a sincronização **remove todos os dados e arquivos** existentes no ambiente beta antes de copiar os recursos de produção. Certifique-se de que este é o comportamento desejado.
 
-## Testing
+## Testes
 
-Compile the TypeScript sources to verify the build:
+Para garantir que o projeto compila corretamente, execute:
 
 ```bash
 npm test
 ```
 
-## License
+## Licença
 
-This project is licensed under the ISC License.
+Este projeto está licenciado sob a licença ISC.
 
