@@ -47,7 +47,6 @@ async function syncMongo() {
 interface Resource {
   secure_url: string;
   public_id: string;
-  folder?: string;
   resource_type: 'image' | 'video' | 'raw';
 }
 
@@ -65,7 +64,6 @@ async function fetchResourcesByType(resource_type: 'image' | 'video' | 'raw'): P
       ...result.resources.map((r: any) => ({
         secure_url: r.secure_url,
         public_id: r.public_id,
-        folder: r.folder,
         resource_type: r.resource_type,
       }))
     );
@@ -104,11 +102,14 @@ async function syncCloudinary() {
   }
 
   for (const resource of resources) {
-    const publicIdWithFolder = resource.folder
-      ? `${resource.folder}/${resource.public_id}`
-      : resource.public_id;
+    const urlPathSegments = new URL(resource.secure_url).pathname.split('/');
+    const uploadIndex = urlPathSegments.indexOf('upload');
+    const folderPath = urlPathSegments.slice(uploadIndex + 2, -1).join('/');
+    const filePublicId = urlPathSegments[urlPathSegments.length - 1].replace(/\.[^/.]+$/, '');
+
     await cloudinary.uploader.upload(resource.secure_url, {
-      public_id: publicIdWithFolder,
+      folder: folderPath || undefined,
+      public_id: filePublicId,
       resource_type: resource.resource_type,
       overwrite: true,
     });
