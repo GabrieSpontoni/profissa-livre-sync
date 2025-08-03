@@ -104,7 +104,10 @@ async function syncCloudinary() {
   for (const resource of resources) {
     const urlPathSegments = new URL(resource.secure_url).pathname.split('/');
     const uploadIndex = urlPathSegments.indexOf('upload');
-    const folderPath = urlPathSegments.slice(uploadIndex + 2, -1).join('/');
+    const versionIndex = urlPathSegments.findIndex(
+      (segment, i) => i > uploadIndex && /^v\d+$/.test(segment)
+    );
+    const folderPath = urlPathSegments.slice(versionIndex + 1, -1).join('/');
     const filePublicId = urlPathSegments[urlPathSegments.length - 1].replace(/\.[^/.]+$/, '');
 
     await cloudinary.uploader.upload(resource.secure_url, {
